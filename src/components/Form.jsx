@@ -14,7 +14,6 @@ class Form extends React.Component {
   handleSubmite(event){
     event.preventDefault();
     let title = this.state.inputValue;
-
       if (title) {
         this.props.onAdd(title )
         this.setState({
@@ -23,7 +22,7 @@ class Form extends React.Component {
       };
   }
   handleChange(event){
-    let title = event.target.value;
+    let title = event.target.value
     this.setState  ({
       inputValue : title
     });

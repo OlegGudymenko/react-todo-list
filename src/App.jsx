@@ -5,6 +5,7 @@ import todos from './todos';
 import Header from './components/Header';
 import Todo from './components/Todo';
 import Form from './components/Form';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 // const title = React.createElement('h1', { className: 'title' }, 'React');
 
@@ -18,6 +19,7 @@ class App extends React.Component{
     this.handleStatusChange = this.handleStatusChange.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
   }
   nextId(){
     this._nextId = this._nextId || 4 ;
@@ -49,11 +51,26 @@ class App extends React.Component{
     let todos = [...this.state.todos,todo];
     this.setState({todos})
   }
+  handleEdit(id,title){
+    let todos = this.state.todos.map( todo => {
+      if ( todo.id === id ){
+        todo.title = title;
+      }
+      return todo;
+
+    })
+    this.setState({todos})
+  }
   render (){
     return (
       <main>
         <Header title={this.props.title} todos={this.state.todos}/>
-        <section className='todo-list'>
+      <ReactCSSTransitionGroup
+         component='section'
+        from className='todo-list'
+        transitionName="slide"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={200}>
             {this.state.todos.map( todo =>
               <Todo
                 title={todo.title}
@@ -61,9 +78,10 @@ class App extends React.Component{
                 id={todo.id}
                 completed={todo.completed}
                 onStatusChange={this.handleStatusChange}
-                onDelete={this.handleDelete}/>
+                onDelete={this.handleDelete}
+                onEdit={this.handleEdit}/>
             )}
-        </section>
+        </ReactCSSTransitionGroup>
       <Form onAdd={this.handleAdd}/>
       </main>
     )
